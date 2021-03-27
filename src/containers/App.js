@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import {BrowserRouter as Router , Route } from 'react-router-dom';
+import {BrowserRouter as Router , Route , Switch } from 'react-router-dom';
 import Header from '../components/Head/Header';
 import Feed from './Feed';
 import Question from './Question';
@@ -30,11 +30,14 @@ class App extends Component {
         <AppWrapper>
           <Header />
           <Router>
+            <Switch>
               <Route exact path="/" 
               component={Feed} />
               <Route path="/questions/:id" 
                  component={Question}
               />
+              <Route path="/questions" component={Feed} />
+              </Switch>
           </Router>
         </AppWrapper>
       </>
@@ -44,4 +47,4 @@ class App extends Component {
 
 export default App;
 
-/*115 50% */
+/*122 50% */

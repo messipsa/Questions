@@ -28,6 +28,8 @@ const Count = styled.div`
   flex-basis: 80%;
 `;
 
+
+
 const Card = ({ data }) => (
   <CardWrapper>
     <Title>{data.title}</Title>

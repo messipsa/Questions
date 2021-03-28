@@ -51,7 +51,37 @@ class Feed extends Component {
     };
   }
 
-  async componentDidMount() {
+
+  async fetchAPI(page)
+  {
+    try
+    {
+      const data = await fetch(
+        `${ROOT_API}questions?order=desc&sort=activity&tagged=reactjs&site=stackoverflow${(page)?`&page=${page}` : ''}`
+      );
+      const dataJson = await data.json();
+
+      if(dataJson)
+      {
+        this.setState({
+          data : dataJson,
+          loading : false,
+        });
+      }
+    }
+
+    catch(error)
+    {
+      this.setState({
+        loading : false,
+        error : error.message,
+      });
+    }
+
+  }
+
+
+  /*async componentDidMount() {
 
     const {page} = this.state;
     try {
@@ -73,7 +103,27 @@ class Feed extends Component {
         error: error.message,
       });
     }
-  }
+  }*/
+
+
+  async  componentDidMount() {
+     const { page } = this.state;
+     this.fetchAPI(page);
+     }
+
+
+     async componentDidUpdate (prevProps)
+     {
+       if(prevProps.location.search !== this.props.location.search)
+       {
+         const query = queryString.parse(this.props.location.search);
+         this.setState({
+           page : parseInt(query.page)
+         }, () =>
+         this.fetchAPI(this.state.page),
+         );
+       }
+     }
 
   render() {
     const { data, loading, error , page } = this.state;
@@ -95,8 +145,7 @@ class Feed extends Component {
 
         <paginationBar>
 
-        <PaginationLink>Previous</PaginationLink>
-        <PaginationLink>Next</PaginationLink>
+          {page > 1 && <PaginationLink to={`${match.url}?page=${page-1}`}>Previous </PaginationLink>}
 
         </paginationBar>
 
